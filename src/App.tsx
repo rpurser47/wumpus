@@ -1,7 +1,8 @@
 // App.tsx
 // Controller: Main game state and logic
 import React, { useState, useEffect, useRef } from 'react';
-import { caveLayout, Room, Hazard, GameModel, GameState } from './model/GameModel';
+import { GameModel, GameState } from './model/GameModel';
+import Confetti from 'react-confetti';
 import CaveMap from './view/CaveMap';
 import StatusPanel from './view/StatusPanel';
 import ActionPanel from './view/ActionPanel';
@@ -21,6 +22,7 @@ function App() {
   const batSound = useRef<HTMLAudioElement | null>(null);
   const pitSound = useRef<HTMLAudioElement | null>(null);
   const wumpusSound = useRef<HTMLAudioElement | null>(null);
+  const wumpusDiesSound = useRef<HTMLAudioElement | null>(null);
   const winSound = useRef<HTMLAudioElement | null>(null);
   const loseSound = useRef<HTMLAudioElement | null>(null);
   
@@ -30,12 +32,13 @@ function App() {
     shootSound.current = new Audio('./sounds/shoot.wav');
     batSound.current = new Audio('./sounds/bat.wav');
     pitSound.current = new Audio('./sounds/pit.wav');
-    wumpusSound.current = new Audio('./sounds/wumpus.wav');
-    winSound.current = new Audio('./sounds/win.wav');
+    wumpusSound.current = new Audio('./sounds/wumpus_eats.wav');
+    wumpusDiesSound.current = new Audio('./sounds/wumpus_dies.wav');
+    winSound.current = new Audio('./sounds/win.mp3'); // Changed to MP3 for better quality
     loseSound.current = new Audio('./sounds/lose.wav');
     
     // Preload sounds
-    const sounds = [moveSound, shootSound, batSound, pitSound, wumpusSound, winSound, loseSound];
+    const sounds = [moveSound, shootSound, batSound, pitSound, wumpusSound, wumpusDiesSound, winSound, loseSound];
     sounds.forEach(sound => {
       if (sound.current) {
         sound.current.load();
@@ -72,14 +75,18 @@ function App() {
       console.log(`Shooting at room ${roomId + 1}`);
       // Handle shooting
       if (model.isValidShootTarget(roomId)) {
-        const messages = model.shootArrow(roomId);
+        model.shootArrow(roomId); // Removed unused messages variable
         playSound(shootSound);
         
         // Check for win/lose conditions after shooting
         const newState = model.getState();
         if (newState.gameOver) {
           if (newState.win) {
-            playSound(winSound);
+            // Play wumpus_dies sound first, then win sound after a short delay
+            playSound(wumpusDiesSound);
+            setTimeout(() => {
+              playSound(winSound);
+            }, 1500); // 1.5 second delay
           } else {
             playSound(loseSound);
           }
@@ -91,19 +98,22 @@ function App() {
       console.log(`Moving to room ${roomId + 1}`);
       // Handle movement
       if (model.isValidMove(roomId)) {
-        const messages = model.movePlayer(roomId);
+        model.movePlayer(roomId); // Removed unused messages variable
         playSound(moveSound);
         
-        // Check for hazards based on messages
+        // Check for hazards based on message log
         const newState = model.getState();
+        const messageLog = newState.messageLog;
+        const recentMessages = messageLog.slice(-3); // Get the most recent messages
+        
         if (newState.gameOver) {
-          if (messages.some(msg => msg.includes('pit'))) {
+          if (recentMessages.some(msg => msg.includes('pit'))) {
             playSound(pitSound);
-          } else if (messages.some(msg => msg.includes('Wumpus'))) {
+          } else if (recentMessages.some(msg => msg.includes('Wumpus'))) {
             playSound(wumpusSound);
           }
           playSound(loseSound);
-        } else if (messages.some(msg => msg.includes('bats'))) {
+        } else if (recentMessages.some(msg => msg.includes('bats'))) {
           playSound(batSound);
         }
         
@@ -124,7 +134,7 @@ function App() {
   // Enter shoot mode
   const handleShoot = () => {
     const model = gameModelRef.current;
-    const messages = model.enterShootMode();
+    model.enterShootMode(); // Removed unused messages variable
     setGameState(model.getState());
   };
   
@@ -135,13 +145,59 @@ function App() {
     setGameState(model.getState());
   };
   
+  // Get window dimensions for confetti
+  const [windowDimensions, setWindowDimensions] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight
+  });
+
+  // Update window dimensions when the window is resized
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '20px auto' }}>
-      <h1 style={{ marginBottom: '20px', color: '#fff', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>Hunt the Wumpus</h1>
+    <div className="App" style={{
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundImage: `url(${process.env.PUBLIC_URL}/cave-bg.jpg)`,
+      backgroundSize: 'cover', // Maintain aspect ratio while filling the container (may crop)
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      overflow: 'auto',
+      display: 'flex', 
+      flexDirection: 'column', 
+      alignItems: 'center', 
+      justifyContent: 'center',
+      padding: '20px 0'
+    }}>
+      {/* Show confetti when the player wins */}
+      {gameState.win && (
+        <Confetti
+          width={windowDimensions.width}
+          height={windowDimensions.height}
+          recycle={false}
+          numberOfPieces={500}
+          gravity={0.2}
+          colors={['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722']}
+        />
+      )}
+      <h1 className="game-title">Hunt the Wumpus</h1>
       
       <div style={{ display: 'flex', gap: '20px', maxWidth: '900px' }}>
         {/* Game map on the left */}
-        <div style={{ position: 'relative', width: 520, height: 520, background: 'rgba(255,255,255,0.5)', borderRadius: 12, boxShadow: '0 4px 24px rgba(0,0,0,0.3)' }}>
+        <div style={{ position: 'relative', width: 520, height: 520, background: 'rgba(255,255,255,0.85)', borderRadius: 12, boxShadow: '0 4px 24px rgba(0,0,0,0.3)' }}>
           <CaveMap 
             rooms={gameState.rooms} 
             playerRoom={gameState.player.room} 

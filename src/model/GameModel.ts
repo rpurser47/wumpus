@@ -65,10 +65,13 @@ export class GameModel {
     // Initialize with a deep copy of the cave layout
     const rooms = JSON.parse(JSON.stringify(caveLayout)) as Room[];
     
+    // Choose a random starting room
+    const startingRoom = Math.floor(Math.random() * rooms.length);
+    
     this.state = {
       rooms,
       player: {
-        room: 0, // Start in room 1 (index 0)
+        room: startingRoom, // Start in a random room
         arrows: this.INITIAL_ARROWS,
         alive: true
       },
@@ -77,7 +80,7 @@ export class GameModel {
       pitRooms: [],
       gameOver: false,
       win: false,
-      messageLog: ["Welcome to Hunt the Wumpus!"],
+      messageLog: ["Welcome to Hunt the Wumpus!", `You begin your adventure in room ${startingRoom + 1}.`],
       selectedRoom: null,
       shootMode: false
     };
@@ -88,9 +91,18 @@ export class GameModel {
   // Place hazards randomly in the cave
   private placeHazards(): void {
     const availableRooms = Array.from({ length: this.state.rooms.length }, (_, i) => i);
-    // Remove player's starting room from available rooms
+    
+    // Remove player's starting room from available rooms to ensure safety
     const playerRoomIndex = availableRooms.indexOf(this.state.player.room);
-    availableRooms.splice(playerRoomIndex, 1);
+    if (playerRoomIndex !== -1) {
+      availableRooms.splice(playerRoomIndex, 1);
+      
+      // Also add the starting room description to the message log
+      const startingRoom = this.state.rooms[this.state.player.room];
+      if (startingRoom.description) {
+        this.addMessage(startingRoom.description);
+      }
+    }
     
     // Place Wumpus
     const wumpusIndex = Math.floor(Math.random() * availableRooms.length);
@@ -168,10 +180,15 @@ export class GameModel {
     
     this.state.player.room = targetRoom;
     const room = this.state.rooms[targetRoom];
+    
+    // Create messages array and add them to the message log
     const messages: string[] = [
       `You move to room ${targetRoom + 1}.`,
       room.description || "You enter a cave chamber."
     ];
+    
+    // Add these messages to the state's message log
+    messages.forEach(msg => this.addMessage(msg));
     
     // Check for hazards
     const hazard = this.state.rooms[targetRoom].hazard;
@@ -181,6 +198,9 @@ export class GameModel {
         this.state.gameOver = true;
         messages.push("OH NO! You walked into the Wumpus's room!");
         messages.push("The Wumpus devours you. GAME OVER!");
+        // Add these hazard messages to the log
+        this.addMessage(messages[2]);
+        this.addMessage(messages[3]);
         break;
         
       case Hazard.Pit:
@@ -188,6 +208,9 @@ export class GameModel {
         this.state.gameOver = true;
         messages.push("AAAAHHHH! You fell into a bottomless pit!");
         messages.push("GAME OVER!");
+        // Add these hazard messages to the log
+        this.addMessage(messages[2]);
+        this.addMessage(messages[3]);
         break;
         
       case Hazard.Bats:
@@ -195,6 +218,16 @@ export class GameModel {
         this.state.player.room = randomRoom;
         messages.push("Giant bats swoop down and carry you away!");
         messages.push(`They drop you in room ${randomRoom + 1}.`);
+        // Add these hazard messages to the log
+        this.addMessage(messages[2]);
+        this.addMessage(messages[3]);
+        
+        // Also add the description of the new room
+        const newRoom = this.state.rooms[randomRoom];
+        if (newRoom.description) {
+          this.addMessage(newRoom.description);
+          messages.push(newRoom.description);
+        }
         break;
     }
     
@@ -211,11 +244,19 @@ export class GameModel {
 
   // Enter shoot mode
   public enterShootMode(): string[] {
-    if (this.state.gameOver) return ["Game over!"];
-    if (this.state.player.arrows <= 0) return ["You're out of arrows!"];
+    if (this.state.gameOver) {
+      this.addMessage("Game over!");
+      return ["Game over!"];
+    }
+    if (this.state.player.arrows <= 0) {
+      this.addMessage("You're out of arrows!");
+      return ["You're out of arrows!"];
+    }
     
     this.state.shootMode = true;
-    return ["Select a connected room to shoot your arrow into."];
+    const message = "Select a connected room to shoot your arrow into.";
+    this.addMessage(message);
+    return [message];
   }
 
   // Exit shoot mode
@@ -236,6 +277,7 @@ export class GameModel {
   public shootArrow(targetRoom: number): string[] {
     if (!this.isValidShootTarget(targetRoom)) {
       this.exitShootMode();
+      this.addMessage("Invalid target!");
       return ["Invalid target!"];
     }
     
@@ -243,6 +285,7 @@ export class GameModel {
     this.state.shootMode = false;
     
     const messages: string[] = [`You shoot an arrow into room ${targetRoom + 1}!`];
+    this.addMessage(messages[0]);
     
     // Check if the Wumpus was hit
     if (targetRoom === this.state.wumpusRoom) {
@@ -250,19 +293,29 @@ export class GameModel {
       this.state.gameOver = true;
       messages.push("You hear a terrible howl!");
       messages.push("You have slain the Wumpus! YOU WIN!");
+      
+      // Add these messages to the log
+      this.addMessage(messages[1]);
+      this.addMessage(messages[2]);
     } else {
       messages.push("Your arrow disappears into the darkness...");
+      this.addMessage(messages[1]);
       
       // Check if player is out of arrows
       if (this.state.player.arrows <= 0) {
         this.state.gameOver = true;
         messages.push("You've used your last arrow!");
         messages.push("With no way to defend yourself, you flee the cave. GAME OVER!");
+        
+        // Add these messages to the log
+        this.addMessage(messages[2]);
+        this.addMessage(messages[3]);
       } else {
         // 25% chance the Wumpus moves after a missed shot
         if (Math.random() < 0.25) {
           this.moveWumpus();
           messages.push("You hear movement in the darkness...");
+          this.addMessage(messages[2]);
           
           // Check if Wumpus moved into player's room
           if (this.state.wumpusRoom === this.state.player.room) {
@@ -270,6 +323,10 @@ export class GameModel {
             this.state.gameOver = true;
             messages.push("The Wumpus was startled by your arrow and moved into your room!");
             messages.push("It devours you. GAME OVER!");
+            
+            // Add these messages to the log
+            this.addMessage(messages[3]);
+            this.addMessage(messages[4]);
           }
         }
       }
