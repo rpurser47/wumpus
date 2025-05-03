@@ -2,13 +2,13 @@
 // Controller: Main game state and logic
 import React, { useState, useEffect, useRef } from 'react';
 import Confetti from 'react-confetti';
+import Image from 'next/image';
 
 import { GameModel, GameState } from './model/GameModel';
 import ActionPanel from './view/ActionPanel';
 import CaveMap from './view/CaveMap';
 import MessageLog from './view/MessageLog';
 import StatusPanel from './view/StatusPanel';
-import './styles/theme.css';
 
 function App() {
   // Game model instance
@@ -29,14 +29,14 @@ function App() {
   
   // Initialize audio elements
   useEffect(() => {
-    moveSound.current = new Audio('./sounds/move.wav');
-    shootSound.current = new Audio('./sounds/shoot.wav');
-    batSound.current = new Audio('./sounds/bat.wav');
-    pitSound.current = new Audio('./sounds/pit.wav');
-    wumpusSound.current = new Audio('./sounds/wumpus_eats.wav');
-    wumpusDiesSound.current = new Audio('./sounds/wumpus_dies.wav');
-    winSound.current = new Audio('./sounds/win.mp3'); // Changed to MP3 for better quality
-    loseSound.current = new Audio('./sounds/lose.wav');
+    moveSound.current = new Audio('/sounds/move.wav');
+    shootSound.current = new Audio('/sounds/shoot.wav');
+    batSound.current = new Audio('/sounds/bat.wav');
+    pitSound.current = new Audio('/sounds/pit.wav');
+    wumpusSound.current = new Audio('/sounds/wumpus_eats.wav');
+    wumpusDiesSound.current = new Audio('/sounds/wumpus_dies.wav');
+    winSound.current = new Audio('/sounds/win.mp3'); // Changed to MP3 for better quality
+    loseSound.current = new Audio('/sounds/lose.wav');
     
     // Preload sounds
     const sounds = [moveSound, shootSound, batSound, pitSound, wumpusSound, wumpusDiesSound, winSound, loseSound];
@@ -148,12 +148,19 @@ function App() {
   
   // Get window dimensions for confetti
   const [windowDimensions, setWindowDimensions] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight
+    width: 0,
+    height: 0
   });
 
-  // Update window dimensions when the window is resized
+  // Initialize window dimensions after component mounts (client-side only)
   useEffect(() => {
+    // Update dimensions initially
+    setWindowDimensions({
+      width: window.innerWidth,
+      height: window.innerHeight
+    });
+    
+    // Update window dimensions when the window is resized
     const handleResize = () => {
       setWindowDimensions({
         width: window.innerWidth,
@@ -172,10 +179,6 @@ function App() {
       left: 0,
       right: 0,
       bottom: 0,
-      backgroundImage: `url(${process.env.PUBLIC_URL}/cave-bg.jpg)`,
-      backgroundSize: 'cover', // Maintain aspect ratio while filling the container (may crop)
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat',
       overflow: 'auto',
       display: 'flex', 
       flexDirection: 'column', 
@@ -183,6 +186,27 @@ function App() {
       justifyContent: 'center',
       padding: '20px 0'
     }}>
+      {/* Background image with Next.js Image component */}
+      <div style={{
+        position: 'fixed',
+        height: '100%',
+        width: '100%',
+        overflow: 'hidden',
+        zIndex: -1,
+        top: 0,
+        left: 0
+      }}>
+        <Image
+          src="/cave-bg.jpg"
+          alt="Cave background"
+          fill
+          style={{
+            objectFit: 'cover',
+            objectPosition: 'center'
+          }}
+          priority
+        />
+      </div>
       {/* Show confetti when the player wins */}
       {gameState.win && (
         <Confetti

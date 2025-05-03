@@ -15,7 +15,8 @@ module.exports = {
     'plugin:jest/recommended',
     'plugin:import/errors',
     'plugin:import/warnings',
-    'plugin:import/typescript'
+    'plugin:import/typescript',
+    'next/core-web-vitals'
   ],
   env: {
     browser: true,

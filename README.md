@@ -1,4 +1,4 @@
-# Hunt the Wumpus (React + TypeScript)
+# Hunt the Wumpus (Next.js + TypeScript)
 
 A graphical, single-page web version of the classic Hunt the Wumpus game, using an irregular 16-room cave map, medieval fantasy theme, and immersive sound effects.
 
@@ -29,7 +29,7 @@ A graphical, single-page web version of the classic Hunt the Wumpus game, using 
 
 ## Getting Started
 1. Install dependencies: `npm install`
-2. Start the dev server: `npm start`
+2. Start the dev server: `npm run dev`
 3. Place your cave background image as `public/cave-bg.jpg`
 4. Sound effects are included in `public/sounds/`:
    - `move.wav` - Moving between rooms
