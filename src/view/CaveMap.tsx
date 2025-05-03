@@ -1,7 +1,8 @@
 // CaveMap.tsx
 // View: SVG cave map overlay for Hunt the Wumpus
 import React from 'react';
-import { Room, Hazard } from '../model/GameModel';
+
+import { Room } from '../model/GameModel';
 
 interface CaveMapProps {
   rooms: Room[];

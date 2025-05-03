@@ -1,12 +1,13 @@
 // App.tsx
 // Controller: Main game state and logic
 import React, { useState, useEffect, useRef } from 'react';
-import { GameModel, GameState } from './model/GameModel';
 import Confetti from 'react-confetti';
-import CaveMap from './view/CaveMap';
-import StatusPanel from './view/StatusPanel';
+
+import { GameModel, GameState } from './model/GameModel';
 import ActionPanel from './view/ActionPanel';
+import CaveMap from './view/CaveMap';
 import MessageLog from './view/MessageLog';
+import StatusPanel from './view/StatusPanel';
 import './styles/theme.css';
 
 function App() {

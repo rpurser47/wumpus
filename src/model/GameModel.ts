@@ -207,7 +207,7 @@ export class GameModel {
         this.addMessage(messages[3]);
         break;
         
-      case Hazard.Pit:
+      case Hazard.Pit: {
         this.state.player.alive = false;
         this.state.gameOver = true;
         messages.push("AAAAHHHH! You fell into a bottomless pit!");
@@ -216,8 +216,9 @@ export class GameModel {
         this.addMessage(messages[2]);
         this.addMessage(messages[3]);
         break;
+      }
         
-      case Hazard.Bats:
+      case Hazard.Bats: {
         const randomRoom = this.randomService.getRandomInt(0, this.state.rooms.length);
         this.state.player.room = randomRoom;
         messages.push("Giant bats swoop down and carry you away!");
@@ -233,6 +234,7 @@ export class GameModel {
           messages.push(newRoom.description);
         }
         break;
+      }
     }
     
     // Add hazard warnings if player is still alive

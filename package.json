@@ -7,7 +7,13 @@
     "build": "react-scripts build",
     "test": "jest",
     "test:interactive": "react-scripts test --watchAll",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx src",
+    "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx src --fix",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss}\"",
+    "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css,scss}\"",
+    "typecheck": "tsc --noEmit",
+    "validate": "npm run lint && npm run format:check && npm run typecheck && npm run test"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -23,6 +29,15 @@
     "@types/node": "^16.18.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "eslint": "^8.57.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jest": "^27.9.0",
+    "eslint-plugin-react": "^7.34.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "^2.8.8",
     "ts-jest": "^29.3.2",
     "typescript": "^4.9.5"
   },
