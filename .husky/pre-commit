@@ -11,7 +11,7 @@ npm run typecheck
 npm test
 
 # Run npm audit (focusing on production dependencies)
-npm audit --production
+npm audit --omit=dev
 
 # Check spelling in code and documentation
 npx cspell "**/*.{js,jsx,ts,tsx,md}"
