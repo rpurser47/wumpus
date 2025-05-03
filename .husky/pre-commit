@@ -13,17 +13,6 @@ npm test
 # Run npm audit (focusing on production dependencies)
 npm audit --omit=dev
 
-# Check for deprecated dependencies
-echo "Checking for deprecated dependencies..."
-npm ls --json | findstr "deprecated" >nul 2>&1
-if not errorlevel 1 (
-  echo "WARNING: Deprecated dependencies found."
-) else (
-  echo "No deprecated dependencies found."
-)
-# For a more thorough check that will always show deprecation warnings
-echo "Note: For a full check of deprecated dependencies, run: npm install --dry-run"
-
 # Check for unused packages
 echo "Checking for unused packages..."
 npx depcheck --ignores="@testing-library/jest-dom,@testing-library/react,@types/jest,@types/node,cspell,husky,depcheck,yaml-lint,lint-staged,ts-jest" 2>&1 || echo "Note: Some warnings about unused dependencies may require investigation."
