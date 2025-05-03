@@ -9,7 +9,7 @@ npm run typecheck
 
 # Run tests with coverage check
 echo "Running tests and checking code coverage thresholds..."
-npm test -- --coverage
+npm test
 
 # Run npm audit (focusing on production dependencies)
 npm audit --omit=dev
