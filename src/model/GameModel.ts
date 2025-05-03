@@ -1,6 +1,8 @@
 // GameModel.ts
 // Model for Hunt the Wumpus game logic and types
 
+import { RandomService, DefaultRandomService } from '../services/RandomService';
+
 export enum Hazard {
   None = 'None',
   Wumpus = 'Wumpus',
@@ -60,13 +62,15 @@ export const caveLayout: Room[] = [
 export class GameModel {
   private state: GameState;
   private readonly INITIAL_ARROWS = 5;
+  private randomService: RandomService;
 
-  constructor() {
+  constructor(randomService: RandomService = new DefaultRandomService()) {
+    this.randomService = randomService;
     // Initialize with a deep copy of the cave layout
     const rooms = JSON.parse(JSON.stringify(caveLayout)) as Room[];
     
     // Choose a random starting room
-    const startingRoom = Math.floor(Math.random() * rooms.length);
+    const startingRoom = this.randomService.getRandomInt(0, rooms.length);
     
     this.state = {
       rooms,
@@ -105,14 +109,14 @@ export class GameModel {
     }
     
     // Place Wumpus
-    const wumpusIndex = Math.floor(Math.random() * availableRooms.length);
+    const wumpusIndex = this.randomService.getRandomInt(0, availableRooms.length);
     this.state.wumpusRoom = availableRooms[wumpusIndex];
     this.state.rooms[this.state.wumpusRoom].hazard = Hazard.Wumpus;
     availableRooms.splice(wumpusIndex, 1);
     
     // Place 2 pits
     for (let i = 0; i < 2; i++) {
-      const pitIndex = Math.floor(Math.random() * availableRooms.length);
+      const pitIndex = this.randomService.getRandomInt(0, availableRooms.length);
       const pitRoom = availableRooms[pitIndex];
       this.state.pitRooms.push(pitRoom);
       this.state.rooms[pitRoom].hazard = Hazard.Pit;
@@ -121,7 +125,7 @@ export class GameModel {
     
     // Place 2 bat colonies
     for (let i = 0; i < 2; i++) {
-      const batIndex = Math.floor(Math.random() * availableRooms.length);
+      const batIndex = this.randomService.getRandomInt(0, availableRooms.length);
       const batRoom = availableRooms[batIndex];
       this.state.batRooms.push(batRoom);
       this.state.rooms[batRoom].hazard = Hazard.Bats;
@@ -214,7 +218,7 @@ export class GameModel {
         break;
         
       case Hazard.Bats:
-        const randomRoom = Math.floor(Math.random() * this.state.rooms.length);
+        const randomRoom = this.randomService.getRandomInt(0, this.state.rooms.length);
         this.state.player.room = randomRoom;
         messages.push("Giant bats swoop down and carry you away!");
         messages.push(`They drop you in room ${randomRoom + 1}.`);
@@ -312,7 +316,7 @@ export class GameModel {
         this.addMessage(messages[3]);
       } else {
         // 25% chance the Wumpus moves after a missed shot
-        if (Math.random() < 0.25) {
+        if (this.randomService.random() < 0.25) {
           this.moveWumpus();
           messages.push("You hear movement in the darkness...");
           this.addMessage(messages[2]);
@@ -339,7 +343,7 @@ export class GameModel {
   private moveWumpus(): void {
     const currentWumpusRoom = this.state.wumpusRoom;
     const possibleRooms = this.state.rooms[currentWumpusRoom].connections;
-    const newWumpusRoom = possibleRooms[Math.floor(Math.random() * possibleRooms.length)];
+    const newWumpusRoom = this.randomService.getRandomItem(possibleRooms);
     
     // Update hazard in old and new room
     this.state.rooms[currentWumpusRoom].hazard = Hazard.None;
