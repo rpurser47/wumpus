@@ -1,3 +1,5 @@
+"use client";
+
 // App.tsx
 // Controller: Main game state and logic
 import React, { useState, useEffect, useRef } from 'react';
