@@ -12,8 +12,7 @@
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss}\" \"pages/**/*.{js,jsx,ts,tsx,json,css,scss}\"",
     "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css,scss}\" \"pages/**/*.{js,jsx,ts,tsx,json,css,scss}\"",
     "typecheck": "tsc --noEmit",
-    "validate": "npm run lint && npm run format:check && npm run typecheck && npm run test",
-    "prepare": "husky"
+    "validate": "npm run lint && npm run format:check && npm run typecheck && npm run test"
   },
   "dependencies": {
     "next": "^15.3.1",
@@ -56,8 +55,6 @@
     ]
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,json,css,scss,md}": [
-      "prettier --write"
-    ]
+    "*.{js,jsx,ts,tsx,json,css,scss,md}": "prettier --write"
   }
 }
