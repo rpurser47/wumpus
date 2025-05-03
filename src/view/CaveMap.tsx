@@ -14,7 +14,7 @@ interface CaveMapProps {
 const CaveMap: React.FC<CaveMapProps> = ({ rooms, playerRoom, shootMode, onRoomClick }) => {
   // Get connected rooms to highlight for movement or shooting
   const connectedRooms = rooms[playerRoom]?.connections || [];
-  
+
   // Determine room color based on state
   const getRoomColor = (roomId: number) => {
     if (roomId === playerRoom) return '#ffe066'; // Player's current room
@@ -23,14 +23,14 @@ const CaveMap: React.FC<CaveMapProps> = ({ rooms, playerRoom, shootMode, onRoomC
     }
     return '#fff'; // Default white
   };
-  
+
   // Determine room border based on state
   const getRoomBorder = (roomId: number) => {
     if (roomId === playerRoom) return 4; // Thicker border for player's room
     if (connectedRooms.includes(roomId)) return 3; // Medium border for connected rooms
     return 2; // Default border
   };
-  
+
   return (
     <svg width="500" height="500" style={{ position: 'absolute', left: 0, top: 0 }}>
       {/* Draw connections */}
@@ -45,8 +45,14 @@ const CaveMap: React.FC<CaveMapProps> = ({ rooms, playerRoom, shootMode, onRoomC
               y1={room.y}
               x2={connRoom.x}
               y2={connRoom.y}
-              stroke={connectedRooms.includes(connId) && connectedRooms.includes(room.id) ? '#666' : '#bbb'}
-              strokeWidth={connectedRooms.includes(connId) && connectedRooms.includes(room.id) ? 3 : 2}
+              stroke={
+                connectedRooms.includes(connId) && connectedRooms.includes(room.id)
+                  ? '#666'
+                  : '#bbb'
+              }
+              strokeWidth={
+                connectedRooms.includes(connId) && connectedRooms.includes(room.id) ? 3 : 2
+              }
             />
           );
         })
@@ -55,12 +61,12 @@ const CaveMap: React.FC<CaveMapProps> = ({ rooms, playerRoom, shootMode, onRoomC
       {rooms.map(room => {
         const isClickable = connectedRooms.includes(room.id) || room.id === playerRoom;
         return (
-          <g 
-            key={room.id} 
+          <g
+            key={room.id}
             onClick={isClickable ? () => onRoomClick(room.id) : undefined}
-            style={{ 
+            style={{
               cursor: isClickable ? 'pointer' : 'default',
-              userSelect: 'none' // Make text non-selectable
+              userSelect: 'none', // Make text non-selectable
             }}
           >
             {/* Using a transparent overlay to ensure clicks work */}
@@ -95,7 +101,7 @@ const CaveMap: React.FC<CaveMapProps> = ({ rooms, playerRoom, shootMode, onRoomC
           </g>
         );
       })}
-      
+
       {/* Shoot mode indicator */}
       {shootMode && (
         <text x="250" y="30" textAnchor="middle" fill="#c00" fontWeight="bold" fontSize={16}>

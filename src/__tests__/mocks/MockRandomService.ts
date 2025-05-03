@@ -2,7 +2,7 @@ import { RandomService } from '../../services/RandomService';
 
 /**
  * MockRandomService - A deterministic implementation of RandomService for testing
- * 
+ *
  * This class allows tests to control "random" behavior by providing predetermined
  * values or sequences, making tests reproducible and deterministic.
  */

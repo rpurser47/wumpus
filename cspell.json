@@ -22,7 +22,18 @@
     "depcheck",
     "batcave",
     "stench",
-    "idx"
+    "idx",
+    "yamllint",
+    "vercel",
+    "ubuntu",
+    "nodejs",
+    "workflow",
+    "workflows",
+    "actionlint",
+    "checkout",
+    "setup",
+    "ci",
+    "cd"
   ],
   "ignorePaths": [
     "node_modules/**",

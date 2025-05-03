@@ -12,20 +12,20 @@ export interface RandomService {
    * Equivalent to Math.random()
    */
   random(): number;
-  
+
   /**
    * Returns a random integer between min (inclusive) and max (exclusive)
    * @param min - The minimum value (inclusive)
    * @param max - The maximum value (exclusive)
    */
   getRandomInt(min: number, max: number): number;
-  
+
   /**
    * Returns a random item from an array
    * @param items - The array to select from
    */
   getRandomItem<T>(items: T[]): T;
-  
+
   /**
    * Shuffles an array and returns a new shuffled array
    * @param array - The array to shuffle
@@ -43,7 +43,7 @@ export class DefaultRandomService implements RandomService {
   random(): number {
     return Math.random();
   }
-  
+
   /**
    * Returns a random integer between min (inclusive) and max (exclusive)
    * @param min - The minimum value (inclusive)
@@ -52,7 +52,7 @@ export class DefaultRandomService implements RandomService {
   getRandomInt(min: number, max: number): number {
     return Math.floor(this.random() * (max - min)) + min;
   }
-  
+
   /**
    * Returns a random item from an array
    * @param items - The array to select from
@@ -60,7 +60,7 @@ export class DefaultRandomService implements RandomService {
   getRandomItem<T>(items: T[]): T {
     return items[this.getRandomInt(0, items.length)];
   }
-  
+
   /**
    * Shuffles an array and returns a new shuffled array
    * @param array - The array to shuffle

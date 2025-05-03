@@ -11,27 +11,19 @@ interface ActionPanelProps {
   onRestart: () => void;
 }
 
-const ActionPanel: React.FC<ActionPanelProps> = ({ 
-  canMove, 
-  canShoot, 
-  shootMode, 
-  onMove, 
-  onShoot, 
-  onRestart 
+const ActionPanel: React.FC<ActionPanelProps> = ({
+  canMove,
+  canShoot,
+  shootMode,
+  onMove,
+  onShoot,
+  onRestart,
 }) => (
   <div className="action-panel">
-    <button 
-      onClick={onMove} 
-      disabled={!canMove}
-      className={shootMode ? '' : 'active-mode'}
-    >
+    <button onClick={onMove} disabled={!canMove} className={shootMode ? '' : 'active-mode'}>
       Move
     </button>
-    <button 
-      onClick={onShoot} 
-      disabled={!canShoot}
-      className={shootMode ? 'active-mode' : ''}
-    >
+    <button onClick={onShoot} disabled={!canShoot} className={shootMode ? 'active-mode' : ''}>
       Shoot
     </button>
     <button onClick={onRestart}>Restart</button>
