@@ -34,7 +34,8 @@
     "checkout",
     "setup",
     "ci",
-    "cd"
+    "cd",
+    "nocoverage"
   ],
   "ignorePaths": [
     "node_modules/**",

@@ -1,7 +1,5 @@
 # Hunt the Wumpus (Next.js + TypeScript)
 
-This is a fantastik game of cave exploration with deliberate misspelling.
-
 A graphical, single-page web version of the classic Hunt the Wumpus game, using an irregular 16-room cave map, medieval fantasy theme, and immersive sound effects.
 
 ## Features
