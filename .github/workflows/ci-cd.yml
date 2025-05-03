@@ -90,11 +90,17 @@ jobs:
       - name: List build output
         run: ls -la .next || echo "No .next directory found"
         
+      - name: Create artifact directory
+        run: mkdir -p artifacts && cp -r .next/* artifacts/
+        
+      - name: List artifact directory
+        run: ls -la artifacts/
+        
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: next-build
-          path: .next/
+          path: artifacts/
           if-no-files-found: warn
           retention-days: 7
 
