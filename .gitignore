@@ -6,9 +6,12 @@ build/
 dist/
 
 # Next.js build output
-.next/*
+.next/
 out/
 build/
+
+# Code Coverage reports
+coverage/
 
 # Environment variables
 .env
