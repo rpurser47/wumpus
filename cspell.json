@@ -1,0 +1,39 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "wumpus",
+    "confetti",
+    "nextjs",
+    "turbo",
+    "eslint",
+    "prettier",
+    "typecheck",
+    "cspell",
+    "tsx",
+    "jsx",
+    "jsdom",
+    "stylelint",
+    "browserlist",
+    "devtools",
+    "npmrc",
+    "husky",
+    "lint-staged",
+    "depcheck",
+    "batcave",
+    "stench",
+    "idx"
+  ],
+  "ignorePaths": [
+    "node_modules/**",
+    "package-lock.json",
+    "public/sounds/**",
+    "public/images/**",
+    "coverage/**",
+    ".next/**",
+    ".git/**"
+  ],
+  "ignoreRegExpList": ["\\(.*\\)", "/\\*.*\\*/", "import\\s.+\\sfrom\\s'.+'", "require\\('.+'\\)"],
+  "allowCompoundWords": true,
+  "minWordLength": 3
+}

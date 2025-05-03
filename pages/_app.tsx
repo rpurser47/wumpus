@@ -1,6 +1,6 @@
-import React from 'react';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
+import React from 'react';
 import '../src/styles/theme.css';
 
 function MyApp({ Component, pageProps }: AppProps) {

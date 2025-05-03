@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import Head from 'next/head';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
+import React, { useEffect } from 'react';
 
 // Import App component with no SSR to avoid hydration errors
 const AppWithNoSSR = dynamic(() => import('../src/App'), {

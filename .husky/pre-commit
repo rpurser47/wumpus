@@ -1,1 +1,17 @@
+# Format code with Prettier through lint-staged
 npx lint-staged
+
+# Run ESLint to check for code quality issues
+npm run lint
+
+# Run TypeScript type checking
+npm run typecheck
+
+# Run tests
+npm test
+
+# Run npm audit (focusing on production dependencies)
+npm audit --production
+
+# Check spelling in code and documentation
+npx cspell "**/*.{js,jsx,ts,tsx,md}"
