@@ -7,8 +7,9 @@ npm run lint
 # Run TypeScript type checking
 npm run typecheck
 
-# Run tests
-npm test
+# Run tests with coverage check
+echo "Running tests and checking code coverage thresholds..."
+npm test -- --coverage
 
 # Run npm audit (focusing on production dependencies)
 npm audit --omit=dev
