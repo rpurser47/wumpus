@@ -19,7 +19,7 @@ echo "Checking for unused packages..."
 npx depcheck --ignores="@testing-library/jest-dom,@testing-library/react,@types/jest,@types/node,cspell,husky,depcheck,yaml-lint,lint-staged,ts-jest" 2>&1 || echo "Note: Some warnings about unused dependencies may require investigation."
 
 # Check spelling in code and documentation
-npx cspell "**/*.{js,jsx,ts,tsx,md,yml,yaml}"
+npx cspell
 
 # Validate GitHub Actions workflow files
 npm run lint:yaml

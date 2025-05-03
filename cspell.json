@@ -47,5 +47,11 @@
   ],
   "ignoreRegExpList": ["\\(.*\\)", "/\\*.*\\*/", "import\\s.+\\sfrom\\s'.+'", "require\\('.+'\\)"],
   "allowCompoundWords": true,
-  "minWordLength": 3
+  "minWordLength": 3,
+  "patterns": [
+    {
+      "name": "source-files",
+      "pattern": "**/*.{ts,tsx,js,jsx,json,md,yml,yaml,css,scss}"
+    }
+  ]
 }
