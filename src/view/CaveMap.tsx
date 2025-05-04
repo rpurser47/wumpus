@@ -32,7 +32,12 @@ const CaveMap: React.FC<CaveMapProps> = ({ rooms, playerRoom, shootMode, onRoomC
   };
 
   return (
-    <svg width="500" height="500" style={{ position: 'absolute', left: 0, top: 0 }}>
+    <svg
+      width="500"
+      height="500"
+      style={{ position: 'absolute', left: 0, top: 0 }}
+      data-testid="cave-map"
+    >
       {/* Draw connections */}
       {rooms.map(room =>
         room.connections.map(connId => {
@@ -53,6 +58,7 @@ const CaveMap: React.FC<CaveMapProps> = ({ rooms, playerRoom, shootMode, onRoomC
               strokeWidth={
                 connectedRooms.includes(connId) && connectedRooms.includes(room.id) ? 3 : 2
               }
+              data-testid={`connection-${room.id}-${connRoom.id}`}
             />
           );
         })
@@ -68,6 +74,7 @@ const CaveMap: React.FC<CaveMapProps> = ({ rooms, playerRoom, shootMode, onRoomC
               cursor: isClickable ? 'pointer' : 'default',
               userSelect: 'none', // Make text non-selectable
             }}
+            data-testid={`room-${room.id}`}
           >
             {/* Using a transparent overlay to ensure clicks work */}
             <circle
@@ -77,6 +84,7 @@ const CaveMap: React.FC<CaveMapProps> = ({ rooms, playerRoom, shootMode, onRoomC
               fill={getRoomColor(room.id)}
               stroke={shootMode && connectedRooms.includes(room.id) ? '#c00' : '#888'}
               strokeWidth={getRoomBorder(room.id)}
+              data-testid={`room-circle-${room.id}`}
             />
             <text
               x={room.x}
@@ -86,6 +94,7 @@ const CaveMap: React.FC<CaveMapProps> = ({ rooms, playerRoom, shootMode, onRoomC
               fill="#333"
               fontWeight={room.id === playerRoom ? 'bold' : 'normal'}
               style={{ pointerEvents: 'none' }} // Let clicks pass through to the parent g element
+              data-testid={`room-text-${room.id}`}
             >
               {room.id + 1}
             </text>
@@ -97,6 +106,7 @@ const CaveMap: React.FC<CaveMapProps> = ({ rooms, playerRoom, shootMode, onRoomC
               fill="transparent"
               stroke="transparent"
               style={{ cursor: isClickable ? 'pointer' : 'default' }}
+              data-testid={`room-overlay-${room.id}`}
             />
           </g>
         );
@@ -104,7 +114,15 @@ const CaveMap: React.FC<CaveMapProps> = ({ rooms, playerRoom, shootMode, onRoomC
 
       {/* Shoot mode indicator */}
       {shootMode && (
-        <text x="250" y="30" textAnchor="middle" fill="#c00" fontWeight="bold" fontSize={16}>
+        <text
+          x="250"
+          y="30"
+          textAnchor="middle"
+          fill="#c00"
+          fontWeight="bold"
+          fontSize={16}
+          data-testid="shoot-mode-indicator"
+        >
           SHOOT MODE - Select Target Room
         </text>
       )}

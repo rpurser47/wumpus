@@ -7,7 +7,7 @@ interface MessageLogProps {
 }
 
 const MessageLog: React.FC<MessageLogProps> = ({ messages }) => (
-  <div className="message-log">
+  <div className="message-log" data-testid="message-log">
     {messages.slice(-6).map((msg, idx) => (
       <div key={idx}>{msg}</div>
     ))}

@@ -19,14 +19,26 @@ const ActionPanel: React.FC<ActionPanelProps> = ({
   onShoot,
   onRestart,
 }) => (
-  <div className="action-panel">
-    <button onClick={onMove} disabled={!canMove} className={shootMode ? '' : 'active-mode'}>
+  <div className="action-panel" data-testid="action-panel">
+    <button
+      onClick={onMove}
+      disabled={!canMove}
+      className={shootMode ? '' : 'active-mode'}
+      data-testid="move-button"
+    >
       Move
     </button>
-    <button onClick={onShoot} disabled={!canShoot} className={shootMode ? 'active-mode' : ''}>
+    <button
+      onClick={onShoot}
+      disabled={!canShoot}
+      className={shootMode ? 'active-mode' : ''}
+      data-testid="shoot-button"
+    >
       Shoot
     </button>
-    <button onClick={onRestart}>Restart</button>
+    <button onClick={onRestart} data-testid="restart-button">
+      Restart
+    </button>
   </div>
 );
 

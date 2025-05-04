@@ -17,18 +17,21 @@ const StatusPanel: React.FC<StatusPanelProps> = ({
   win,
   shootMode,
 }) => (
-  <div className="status-panel">
-    <div>
+  <div className="status-panel" data-testid="status-panel">
+    <div data-testid="room-display">
       Room: <b>{playerRoom + 1}</b>
     </div>
-    <div>
+    <div data-testid="arrows-display">
       Arrows left: <b>{arrows}</b>
     </div>
-    <div>
+    <div data-testid="mode-display">
       Mode: <b>{shootMode ? 'Shooting' : 'Moving'}</b>
     </div>
     {gameOver && (
-      <div className={win ? 'win-msg' : 'lose-msg'}>
+      <div
+        className={win ? 'win-msg' : 'lose-msg'}
+        data-testid={win ? 'win-message' : 'game-over-message'}
+      >
         {win ? 'You have slain the Wumpus!' : 'Game Over!'}
       </div>
     )}
