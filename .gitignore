@@ -24,6 +24,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Build cache
+tsconfig.tsbuildinfo
+
 # IDE files
 .idea/
 .vscode/

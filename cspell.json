@@ -35,6 +35,7 @@
     "setup",
     "ci",
     "cd",
+    "reimagining",
     "nocoverage"
   ],
   "ignorePaths": [
